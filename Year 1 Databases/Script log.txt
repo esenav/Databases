@@ -1,0 +1,272 @@
+--------------
+SET STORAGE_ENGINE = INNODB
+--------------
+
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+--------------
+DROP DATABASE IF EXISTS BlogDB
+--------------
+
+Query OK, 5 rows affected (0.69 sec)
+
+--------------
+CREATE DATABASE BlogDB
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+CREATE TABLE Editor ( 
+UserName CHAR(30) NOT NULL,
+Name CHAR(30) NOT NULL,
+Email CHAR(50) NOT NULL,
+TitleOfBLog CHAR(50) NOT NULL,
+DateOfBirth DATE NOT NULL,
+PRIMARY KEY (UserName)
+)
+--------------
+
+Query OK, 0 rows affected (0.26 sec)
+
+--------------
+INSERT INTO Editor values('Mystery', 'MysteryMan', 'MysteryMan@somewhere.com', 'FunStuff', '1994-10-11')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Editor values('JohnEveryday', 'John', 'John@somewhere', 'Everyday', '1990-08-11')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+CREATE TABLE Post (
+PostUserName CHAR(30) NOT NULL,
+PostID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+Title CHAR (50) NOT NULL,
+TimestampID TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+Content LONGTEXT NOT NULL,
+FOREIGN KEY (PostUserName) references Editor(UserName) ON DELETE CASCADE
+)
+--------------
+
+Query OK, 0 rows affected (0.31 sec)
+
+--------------
+INSERT INTO Post(PostUserName,Title,Content) values('Mystery','Post1', 'aa' )
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Post(PostUserName,Title,Content) values('Mystery','Post2','sss')
+--------------
+
+Query OK, 1 row affected (0.04 sec)
+
+--------------
+INSERT INTO Post(PostUserName,Title,Content) values('JohnEveryday','Post3','dddd')
+--------------
+
+Query OK, 1 row affected (0.10 sec)
+
+--------------
+INSERT INTO Post(PostUserName,Title,Content) values('Mystery','Post4','fffff')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Post(PostUserName,Title,Content) values('JohnEveryday','Post5','gggggg')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Post(PostUserName,Title,Content) values('JohnEveryday','Post6','hhhhhhh')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+CREATE TABLE Comment (
+CName CHAR(30),
+CEmail CHAR(50),
+CommentID INT AUTO_INCREMENT PRIMARY KEY,
+TimeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CContent LONGTEXT NOT NULL,
+On_p INTEGER,
+FOREIGN KEY(On_p) references Post(PostID) ON DELETE CASCADE
+)
+--------------
+
+Query OK, 0 rows affected (0.26 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Petras','Petras@Anyksciai.com','Kai lievai')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Jonas','Jonas@Kaunas.com','Ziauriai geras')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Petriukas','Petriukas@Anyksciai.com','Ka nusisnekat?')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Jonukas','Jonuakas@Kaunas.com','Hahah visi jus lopai')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Tomas','Tomas@Alytus.com','Geras sitas :D')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Tomis','Tomis@Kaunas.com','Tylek')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Vytautas','Vytautas@Vilnius.com','Blalalallaal')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Mindaugas','Mindaugas@Trakai.com','As Karaliuuuuus')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Algirdas','Algirdas@Poland.com','O as Lenkijos karalius')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Comment(CName, CEmail, CContent) values('Barbora','Barbora@Radvila.com','Manes visi nori')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+CREATE TABLE Category (
+CategoryID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+CategoryName CHAR(50)
+)
+--------------
+
+Query OK, 0 rows affected (0.25 sec)
+
+--------------
+INSERT INTO Category(CategoryName) values ('Musing')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Category(CategoryName) values ('Work')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+INSERT INTO Category(CategoryName) values ('Social')
+--------------
+
+Query OK, 1 row affected (0.10 sec)
+
+--------------
+INSERT INTO Category(CategoryName) values ('General')
+--------------
+
+Query OK, 1 row affected (0.07 sec)
+
+--------------
+CREATE TABLE Assigned(
+PoPrKey int not null,
+CatPrKey int not null,
+
+FOREIGN KEY (PoPrKey) references Post(PostID) ON DELETE CASCADE,
+FOREIGN KEY (CatPrKey) references Category(CategoryID) ON DELETE CASCADE
+)
+--------------
+
+Query OK, 0 rows affected (0.29 sec)
+
+--------------
+Insert INTO Assigned VALUES
+(1,1),
+(1,2),
+(2,1),
+(2,4),
+(4,1),
+(4,2),
+(5,3),
+(5,4),
+(6,3),
+(6,1),
+(3,1)
+--------------
+
+Query OK, 11 rows affected (0.04 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+--------------
+SELECT Name,Email, TIMESTAMPDIFF(Year,DateOfBirth,CURRENT_TIMESTAMP) AS Age
+FROM editor
+--------------
+
++------------+--------------------------+------+
+| Name       | Email                    | Age  |
++------------+--------------------------+------+
+| John       | John@somewhere           |   24 |
+| MysteryMan | MysteryMan@somewhere.com |   20 |
++------------+--------------------------+------+
+2 rows in set (0.00 sec)
+
+--------------
+SELECT PostUserName, TitleOfBlog, count(PostID) AS CoutnedPost FROM editor, post
+WHERE PostUserName=Username GROUP BY username
+--------------
+
++--------------+-------------+-------------+
+| PostUserName | TitleOfBlog | CoutnedPost |
++--------------+-------------+-------------+
+| JohnEveryday | Everyday    |           3 |
+| Mystery      | FunStuff    |           3 |
++--------------+-------------+-------------+
+2 rows in set (0.00 sec)
+
+--------------
+SELECT PostUserName, Title, TimestampID, GROUP_CONCAT(CategoryName) AS categories FROM Post, Category, Assigned WHERE Assigned.PoPrKey=Post.PostID and Assigned.CatPrKey=Category.CategoryID GROUP BY PoPrKey
+--------------
+
++--------------+-------+---------------------+----------------+
+| PostUserName | Title | TimestampID         | categories     |
++--------------+-------+---------------------+----------------+
+| Mystery      | Post1 | 2014-12-02 20:16:30 | Musing,Work    |
+| Mystery      | Post2 | 2014-12-02 20:16:30 | General,Musing |
+| JohnEveryday | Post3 | 2014-12-02 20:16:30 | Musing         |
+| Mystery      | Post4 | 2014-12-02 20:16:30 | Musing,Work    |
+| JohnEveryday | Post5 | 2014-12-02 20:16:30 | Social,General |
+| JohnEveryday | Post6 | 2014-12-02 20:16:30 | Social,Musing  |
++--------------+-------+---------------------+----------------+
+6 rows in set (0.00 sec)
+
+Bye
