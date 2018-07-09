@@ -1,0 +1,31 @@
+#!/bin/dash 
+echo "Creating Elastic Search ENV"
+
+mkdir /tmp/elastic_kibana
+echo "/tmp/elastic_kibana CREATED"
+cp ./setupElastic /tmp/elastic_kibana
+cp ./runKibana /tmp/elastic_kibana
+cp ./shakespeare_6.0.json /tmp/elastic_kibana
+echo "Files copied to TMP Folder"
+cd /tmp/elastic_kibana
+echo "Moving to TMP folder to start download"
+curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.2.tar.gz
+curl -L -o jre8.tgz http://javadl.oracle.com/webapps/download/AutoDL?BundleId=216422
+curl -L -O https://artifacts.elastic.co/downloads/kibana/kibana-5.0.0-linux-x86_64.tar.gz
+echo "Unpacking downloaded files"
+tar xf elasticsearch-5.1.2.tar.gz
+tar xf jre8.tgz
+tar xf kibana-5.0.0-linux-x86_64.tar.gz
+echo "Setting up Java HOME for Elastic Search database"
+JAVA_HOME=/tmp/elastic_kibana/jre1.8.0_111 PATH=$JAVA_HOME/bin:$PATH elasticsearch-5.1.2/bin/elasticsearch -d
+echo "First Error is normal to set up local host....AFTER ERROR wait 15 seconds"
+curl -XPOST 'localhost:9200/shakespeare/doc/_bulk?pretty' --data-binary @shakespeare_6.0.json
+sleep 15s
+curl -XPOST 'localhost:9200/shakespeare/doc/_bulk?pretty' --data-binary @shakespeare_6.0.json
+echo "CHECKING indexed documents"
+curl 'localhost:9200/_cat/indices?v'
+
+echo "All OK, now Kibana Launching"
+
+gnome-terminal -x ./runKibana
+

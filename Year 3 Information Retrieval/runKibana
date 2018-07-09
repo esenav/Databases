@@ -1,0 +1,9 @@
+#!/bin/dash 
+cd /tmp/elastic_kibana
+echo "JAVA HOME setting up for kibana"
+echo "wait up to 20 sec to OPEN BROWSER window with kibana running"
+JAVA_HOME=/tmp/elasticAssic/jre1.8.0_111 PATH=$JAVA_HOME/bin:$PATH kibana-5.0.0-linux-x86_64/bin/kibana &
+sleep 20s
+sensible-browser http://localhost:5601/app/kibana#/dev_tools
+echo "Just wait a second pleaaase :) opening"
+bash
